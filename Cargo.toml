@@ -1,6 +1,6 @@
 [package]
-name = "terminal-spinner-symbols"
-description = "A library declaring frames and animation intervals for spinner animations"
+name = "terminal-spinner-data"
+description = "A library declaring frames and animation interval data for spinner animations"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/SirWindfield/terminal-spinners-rs"
 version = "0.1.0"
