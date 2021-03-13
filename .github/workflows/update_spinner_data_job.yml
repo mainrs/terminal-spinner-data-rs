@@ -1,0 +1,60 @@
+name: "Cron: spinners.json"
+
+on:
+  schedule:
+    - cron: "11 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  download_and_replace:
+    name: Download and replace spinners.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Download from sindresorhus/cli-spinners
+        run: "curl --silent https://raw.githubusercontent.com/sindresorhus/cli-spinners/master/spinners.json > spinners.json"
+
+      - name: Check if workspace is dirty
+        id: git-workspace
+        run: 'if [ -z "$(git status --porcelain)" ]; then echo "::set-output name=dirty::yes"; fi'
+
+      - name: Install Rust toolchain
+        if: steps.git-workspace.outputs.dirty == 'yes'
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: rustfmt
+
+      - name: Install cargo-next
+        if: steps.git-workspace.outputs.dirty == 'yes'
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: cargo-next
+
+      - name: Bump version
+        if: steps.git-workspace.outputs.dirty == 'yes'
+        uses: actions-rs/cargo@v1
+        with:
+          command: next
+          args: --patch
+
+      - name: Store newest version
+        if: steps.git-workspace.outputs.dirty == 'yes'
+        id: project-version
+        run: "echo ::set-output name=version::$(cargo next --get)"
+
+      - name: Commit changes
+        if: steps.git-workspace.outputs.dirty == 'yes'
+        uses: EndBug/add-and-commit@v7
+        args:
+          add: "spinners.json"
+          author_name: ${{ GITHUB_ACTOR }}
+          author_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          branch: main
+          message: "chore: update spinners.json file"
+          tag: "v${{ steps.project-version.version }}"
