@@ -6,7 +6,9 @@ You are probably looking for [`terminal-spinners`](https://github.com/SirWindfie
 
 ## Update
 
-Run the script [`fetch-cli-spinners-json-file`](./scripts/fetch-cli-spinners-json-file.sh) to update to the newest spinners.
+~~Run the script [`fetch-cli-spinners-json-file`](./scripts/fetch-cli-spinners-json-file.sh) to update to the newest spinners.~~
+
+Updates are now automatically performed through a GitHub Actions workflow on a daily basis.
 
 #### License
 
