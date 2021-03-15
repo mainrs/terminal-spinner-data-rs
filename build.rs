@@ -56,15 +56,6 @@ fn main() -> Result<()> {
     let dest_path = Path::new(&out_dir).join("spinners.rs");
     fs::write(&dest_path, module_to_write.to_string())?;
 
-    // Format the generated source code. rustfmt is a hard-dependency and the script
-    // fails otherwise.
-    let output = Command::new("cargo").arg("fmt").output()?;
-    if !output.status.success() {
-        io::stdout().write_all(&output.stdout)?;
-        io::stderr().write_all(&output.stderr)?;
-        panic!("Failed to invoke rustfmt");
-    }
-
     // Only re-run if the actual spinner data has changed.
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=spinners.json");
