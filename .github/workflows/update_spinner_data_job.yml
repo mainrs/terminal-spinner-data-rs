@@ -18,7 +18,7 @@ jobs:
 
       - name: Check if workspace is dirty
         id: git-workspace
-        run: 'if [ -z "$(git status --porcelain)" ]; then echo "::set-output name=dirty::yes"; fi'
+        run: 'if ! git diff-files --quiet --ignore-submodules --; then echo "::set-output name=dirty::yes"; fi'
 
       - name: Install Rust toolchain
         if: steps.git-workspace.outputs.dirty == 'yes'
