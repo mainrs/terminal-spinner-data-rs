@@ -58,3 +58,10 @@ jobs:
           branch: main
           message: "chore: update spinners.json file"
           tag: "v${{ steps.project-version.outputs.version }}"
+
+      - name: Publish new release to crates.io
+        if: steps.git-workspace.outputs.dirty == 'yes'
+        uses: actions-rs/cargo@v1
+        with:
+          command: publish
+          args: --token ${{ secrets.CRATES_IO_TOKEN }}
