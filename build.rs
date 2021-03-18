@@ -2,13 +2,7 @@ use anyhow::Result;
 use heck::ShoutySnakeCase;
 use quote::{format_ident, quote};
 use serde::Deserialize;
-use std::{
-    collections::HashMap,
-    fs,
-    io::{self, Write},
-    path::Path,
-    process::Command,
-};
+use std::{collections::HashMap, fs, path::Path};
 
 // Deserialization type.
 #[derive(Debug, Deserialize)]
