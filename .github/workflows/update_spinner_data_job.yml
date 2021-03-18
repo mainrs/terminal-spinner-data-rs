@@ -57,4 +57,4 @@ jobs:
           author_email: "41898282+github-actions[bot]@users.noreply.github.com"
           branch: main
           message: "chore: update spinners.json file"
-          tag: "v${{ steps.project-version.version }}"
+          tag: "v${{ steps.project-version.outputs.version }}"
