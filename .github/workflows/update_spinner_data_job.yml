@@ -51,7 +51,7 @@ jobs:
       - name: Commit changes
         if: steps.git-workspace.outputs.dirty == 'yes'
         uses: EndBug/add-and-commit@v7
-        args:
+        with:
           add: "spinners.json"
           author_name: ${{ GITHUB_ACTOR }}
           author_email: "41898282+github-actions[bot]@users.noreply.github.com"
