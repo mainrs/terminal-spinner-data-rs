@@ -10,15 +10,18 @@ jobs:
     name: Download and replace spinners.json
     runs-on: ubuntu-latest
     steps:
+      # Needed for act
+      # - run: sudo apt-get update && apt-get install build-essential --yes
+
       - name: Checkout sources
         uses: actions/checkout@v2
 
       - name: Download from sindresorhus/cli-spinners
-        run: "curl --silent https://raw.githubusercontent.com/sindresorhus/cli-spinners/master/spinners.json > spinners.json"
+        run: 'curl --silent https://raw.githubusercontent.com/sindresorhus/cli-spinners/master/spinners.json > "$GITHUB_WORKSPACE/spinners_upstream.json"'
 
       - name: Check if workspace is dirty
         id: git-workspace
-        run: 'if ! git diff-files --quiet --ignore-submodules --; then echo "::set-output name=dirty::yes"; fi'
+        run: 'if ! cmp -s "$GITHUB_WORKSPACE/spinners.json" "$GITHUB_WORKSPACE/spinners_upstream.json"; then echo "::set-output name=dirty::yes" && mv -f "$GITHUB_WORKSPACE/spinners_upstream.json" "$GITHUB_WORKSPACE/spinners.json"; fi'
 
       - name: Install Rust toolchain
         if: steps.git-workspace.outputs.dirty == 'yes'
